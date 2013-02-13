@@ -17,5 +17,5 @@
     ,   "expect.js":"0.2.0"
     }
 ,   "repository":   "git://github.com/darobin/couth"
-,   "main":         "lib/couth.js"
+,   "main":         "lib/couth"
 }
