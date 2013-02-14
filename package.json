@@ -4,13 +4,14 @@
 ,   "version":      "0.0.3"
 ,   "author":       "Robin Berjon <robin@berjon.com>"
 ,   "dependencies": {
-        "nopt":         "2.1.1"
-    ,   "underscore":   "1.4.4"
-    ,   "cradle":       "0.6.4"
-    ,   "mime":         "1.2.9"
-    ,   "request":      "2.12.0"
-    ,   "async":        "0.2.5"
+        "nopt":             "2.1.1"
+    ,   "underscore":       "1.4.4"
+    ,   "cradle":           "0.6.4"
+    ,   "mime":             "1.2.9"
+    ,   "request":          "2.12.0"
+    ,   "async":            "0.2.5"
     ,   "json-validation":  "1.0.2"
+    ,   "wrench":           "1.4.4"
     }
 ,   "devDependencies": {
         "mocha":    "1.7.3"
