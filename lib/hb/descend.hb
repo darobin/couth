@@ -1,5 +1,9 @@
 {{#each fields}}
-  <div{{#unless isHidden }} class='control-group'{{/unless}}>
-    {{> dispatch}}
-  </div>
+  {{#if isHidden}}
+    {{> hidden}}
+  {{else}}
+    <div class='control-group'>
+      {{> dispatch}}
+    </div>
+  {{/if}}
 {{/each}}
