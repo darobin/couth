@@ -1,4 +1,4 @@
 <fieldset>
-  <legend>{{ description }}</legend>
+  {{#if description}}<legend>{{description}}</legend>{{/if}}
   {{> descend}}
 </fieldset>
