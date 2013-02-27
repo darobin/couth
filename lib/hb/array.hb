@@ -3,7 +3,7 @@
   <div couth-dnd='{{path}}'>
     <fieldset ng-repeat='item in {{path}}' class='couth-item'>
       <button type='button' class='couth-item-delete btn btn-danger btn-mini' ng-click='$couthArrayDel("{{path}}", $index, $event)'><i class='icon-remove icon-white'></i></button>
-      <button type='button' class='couth-move btn btn-mini'><i class='icon-move'></i></button>
+      <span role='button' class='couth-move btn btn-mini'><i class='icon-move'></i></span>
       {{#with items}}{{> dispatch}}{{/with}}
     </fieldset>
   </div>
