@@ -3,7 +3,7 @@
     {{#if description}}<legend>{{description}}</legend>{{/if}}
     {{> descend}}
     <div class='form-actions'>
-      <button ng-click='$couthReset($event)' class='btn btn-danger'>Reset</button>
+      <button type='button' ng-click='$couthReset($event)' class='btn btn-danger'>Reset</button>
       <button type='submit' class='btn btn-success'>Save</button>
     </div>
   </fieldset>
