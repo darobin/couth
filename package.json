@@ -12,7 +12,6 @@
     ,   "async":            "0.2.5"
     ,   "json-validation":  "1.0.4"
     ,   "wrench":           "1.4.4"
-    ,   "inflection":       "1.2.5"
     ,   "handlebars":       "1.0.9"
     }
 ,   "devDependencies": {
