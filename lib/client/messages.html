@@ -1,0 +1,12 @@
+<div class='row-fluid ng-cloak' ng-cloak>
+  <div class='alert alert-error alert-block' ng-show='$couthError'>
+    <button type='button' class='close' ng-click='$couthError = false'>&times;</button>
+    <h4>Error</h4>
+    {{$couthError}}
+  </div>
+  <div class='alert alert-success alert-block' ng-show='$couthSuccess'>
+    <button type='button' class='close' ng-click='$couthSuccess = false'>&times;</button>
+    <h4>Success!</h4>
+    {{$couthSuccess}}
+  </div>
+</div>

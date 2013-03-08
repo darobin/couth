@@ -1,0 +1,46 @@
+<ul class="nav pull-right">
+  <li class="divider-vertical"></li>
+  <li ng-show='!$couthUser.name'>
+    <div class='btn-group couth-signup'>
+      <button type='button' class="btn btn-small btn-success dropdown-toggle" data-toggle="dropdown">Sign Up</button>
+      <div class='dropdown-menu pull-right'>
+        <form class='form-inline'>
+          <fieldset ng-click='$event.stopPropagation()'>
+            <label>
+              Name
+              <input type='text' ng-model='username' required class='input-small'>
+            </label>
+            <label>
+              Password
+              <input type='password' ng-model='password' required class='input-small'>
+            </label>
+            <button type='submit' class='btn btn-success' ng-click='$couthSignupForm($event, username, password)'>Ok</button>
+          </fieldset>
+        </form>
+      </div>
+    </div>
+  </li>
+  <li ng-show='!$couthUser.name'>
+    <div class='btn-group couth-login'>
+      <button type='button' class="btn btn-small btn-primary dropdown-toggle" data-toggle="dropdown">Login</button>
+      <div class='dropdown-menu pull-right'>
+        <form class='form-inline'>
+          <fieldset ng-click='$event.stopPropagation()'>
+            <label>
+              Name
+              <input type='text' ng-model='username' required class='input-small'>
+            </label>
+            <label>
+              Password
+              <input type='password' ng-model='password' required class='input-small'>
+            </label>
+            <button type='submit' class='btn btn-success' ng-click='$couthLoginForm($event, username, password)'>Login</button>
+          </fieldset>
+        </form>
+      </div>
+    </div>
+  </li>
+  <li ng-show='$couthUser.name'>
+    <button type='button' class="btn btn-small btn-danger" ng-click='$couthLogout()'>Logout</button>
+  </li>
+</ul>
