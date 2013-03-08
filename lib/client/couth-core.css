@@ -1,0 +1,43 @@
+
+/* XXX this needs to move to the core as well */
+
+.couth-item {
+    background: #fff;
+}
+
+.couth-placeholder {
+    background: #eee;
+    border: 1px dashed #ccc;
+    border-radius:  5px;
+}
+
+.couth-move {
+    float:  right;
+    margin-right:   10px;
+}
+
+.couth-item-delete {
+    float:  right;
+}
+
+/* just to make sure we're on the safe side, FOUC wise */
+[ng\:cloak], [ng-cloak], .ng-cloak {
+    display: none;
+}
+
+.couth-signup {
+    margin-right:   10px;
+}
+
+.dropdown-menu .form-inline {
+    margin: 10px 20px;
+}
+
+.couth-form-controls {
+    margin-bottom:  10px;
+    text-align: right;
+}
+
+td.couth-actions, th.couth-actions {
+    text-align: right;
+}
