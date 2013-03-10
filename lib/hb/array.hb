@@ -9,7 +9,7 @@
   </div>
   <div class='control-group'>
     <div class='controls'>
-      <button type='button' class='btn btn-success btn-mini' ng-click='$couthArrayAdd("{{path}}", "{{items.emptyType}}", $event)'>Add item</button>
+      <button type='button' class='btn btn-success btn-mini' ng-click='$couthArrayAdd("{{path}}", "{{items.emptyType}}", $event)'>Add {{#if items.description}}{{items.description}}{{else}}item{{/if}}</button>
     </div>
   </div>
 </fieldset>
