@@ -50,6 +50,53 @@ td.couth-actions, th.couth-actions {
     display:    inline-block;
 }
 
+.couth-success, .couth-error {
+    left: auto;
+    right: 0;
+    background-clip: padding-box;
+    border: 1px solid #000;
+    border-radius: 6px 6px 6px 6px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    min-width: 400px;
+    margin: 0 20px 20px 0;
+    padding: 8px 35px 14px 14px;
+    position: fixed;
+    z-index: 1000;
+}
+.couth-success h4, .couth-error h4 {
+    margin-top: 0;
+}
+
+.couth-success {
+    background-color: #dff0d8;
+    border-color: #d6e9c6;
+    color: #468847;
+    
+}
+.couth-error {
+    background-color: #f2dede;
+    border-color: #eed3d7;
+    color: #b94a48;
+}
+
+.couth-close {
+    line-height: 20px;
+    position: relative;
+    right: -21px;
+    top: -2px;
+    vertical-align: middle;
+    background: none repeat scroll 0 0 transparent;
+    border: 0 none;
+    cursor: pointer;
+    padding: 0;
+    float: right;
+    font-size: 20px;
+    font-weight: bold;
+    opacity: 0.2;
+    text-shadow: 0 1px 0 #FFFFFF;
+}
+
+
 /*! jQuery UI - v1.10.1 - 2013-02-26
 * http://jqueryui.com
 * Includes: jquery.ui.core.css
