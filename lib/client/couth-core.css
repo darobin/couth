@@ -39,6 +39,7 @@
 
 td.couth-actions, th.couth-actions {
     text-align: right;
+    white-space: nowrap
 }
 
 .couth-pagination {
