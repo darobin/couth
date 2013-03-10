@@ -1,0 +1,13 @@
+<div class="pagination">
+  <ul>
+    <li ng-class='{ disabled: !$couthHasPrev() }'>
+      <a href='#' ng-click='$couthHasPrev() &amp;&amp; ($parent.$couthCurrentPage = $parent.$couthCurrentPage - 1)'>&laquo;</a>
+    </li>
+    <li ng-repeat='page in $couthPageList()' ng-class='{ active: $index == $parent.$parent.$couthCurrentPage }'>
+      <a href='#' ng-click='$parent.$parent.$couthCurrentPage = $index'>{{page}}</a>
+    </li>
+    <li ng-class='{ disabled: !$couthHasNext()}'>
+      <a href='#' ng-click='$couthHasNext() &amp;&amp; ($parent.$couthCurrentPage = $parent.$couthCurrentPage + 1)'>&raquo;</a>
+    </li>
+  </ul>
+</div>
