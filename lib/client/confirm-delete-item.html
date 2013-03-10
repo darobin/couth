@@ -1,0 +1,6 @@
+<button type='button' class='btn btn-mini btn-danger' 
+        ng-click='$couthItem.$couthConfirm = true' ng-show='!$couthItem.$couthConfirm'>&times;</button>
+<div class='btn-group' ng-show='$couthItem.$couthConfirm'>
+  <button type='button' class='btn btn-mini btn-danger' ng-click='$emit("couth:delete", $couthItem)'>confirm</button>
+  <button type='button' class='btn btn-mini' ng-click='$couthItem.$couthConfirm = false'>cancel</button>
+</div>
