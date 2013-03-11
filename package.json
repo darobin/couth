@@ -10,7 +10,7 @@
     ,   "mime":             "1.2.9"
     ,   "request":          "2.12.0"
     ,   "async":            "0.2.5"
-    ,   "json-validation":  "1.0.4"
+    ,   "web-schema":       "1.1.0"
     ,   "wrench":           "1.4.4"
     ,   "handlebars":       "1.0.9"
     }
