@@ -16,7 +16,8 @@ Given little more than a [Web Schema](https://github.com/darobin/web-schema), it
 * Handle basic permissions for users editing content
 * Handle all the Couch configuration, including vhost, rewrites, session, etc so you
   don't have to
-* Generate a form to create and edit the relevant objects
+* Generate a form to create and edit the relevant objects, including nice things such
+  as direct validation or drag and drop reodering of array items.
 * Generate a client side API to access the CRUD backend easily
 * Provide various paraphernalia for AngularJS apps
 
@@ -219,22 +220,92 @@ Adds a library of code that views, lists, shows, etc. can load using CommonJS an
 of "foo" code can then load it with `require("lib/foo")`). `content` is a string pointing to a
 file to load, or a Buffer.
 
-### ``
-### ``
-### ``
-### ``
-### ``
-### ``
-### ``
-### ``
-### ``
-### ``
-### ``
-### ``
-### ``
-### ``
-### ``
-### ``
+### `app.type(name)`
+
+Creates a new `Type` object for the given name and returns it. See below for the Type API.
+
+## Type API
+
+### `type.schema(webSchema)`
+
+Simply accepts a [Web Schema](https://github.com/darobin/web-schema). Note however that the
+current implementation of the forms generator does not support absolutely all variants (it
+supports a lot of them though) so don't go *too* wild. Also, you want to use the `description`
+field almost systematically since that's what produces the form label.
+
+### `type.permissions(perms)`
+
+Sets the permissions on this type. The default is full access to all. The keys of the `perms`
+object can be `create`, `update`, or `delete` (`read` will be supported before v1.0). The values
+can be any of `*` for access to anyone, `logged` to required a logged in user, or `admin` for
+a DB admin. The capabilities for these checks will grow.
+
+### `type.deploy(couth, ddoc)`
+
+This is the method that Couth call on the type object when it needs to deploy it. There should
+be no reason for you to call this directly.
+
+## Client-side Resources
+
+Couth provides a number of client side resources that can prove to be very useful. The example
+app makes use of all of them.
+
+### `/couth/js/all.js`
+
+This contains AngularJS, jQuery, the small parts of jQuery UI needed for drag and drop reordering,
+the code to generate JS APIs to the backend and a host of useful code if you're using Angular.
+The latter part includes:
+
+* The `couth-type` directive that a form uses to register itself as an editor for a type.
+* The `couth-dnd` directive that is used to support drag and drop reordering of items in a model.
+* The `CouthCtrl` controller that your application would likely use. This handles setting up the
+  session so that you know who the user is (if logged in), handling all the login/logout/signup
+  functionality. It also handles the loading events (to show the loader), error and success
+  messages, and how to dispatch to the form that supports a given type when it needs to be edited
+  or created.
+* The `CouthFormCtrl` controller that is used on the form. This handles saving, resetting, 
+  and reordering arrays.
+* The `startFrom` filter that makes it possible to do pagination of the content.
+* The `CouthSimpleCRUD` service which makes it easier to set everything up to support full client-side
+  CRUD with a single method call (see the example app's client side JS).
+
+### `/couth/forms/$typeName.html`
+
+The form that knows how to edit a given type. You can include this with `ng-include`.
+
+### `/couth/types/$typeName.json`
+
+A representation of all the types. This can be used to discover information about the types.
+
+### `/couth/user.html`
+
+An includable piece of HTML that can contains all that's needed to have a UI for login, logout,
+and signup.
+
+### `/couth/load-indicator.html` and `/couth/img/loader.gif`
+
+An includable piece of HTML to show the load indicator image when a request is going on.
+
+### `/couth/messages.html`
+
+Success/error messages that respond to success and error events in the page.
+
+### `/couth/css/couth-core.css`
+
+A few CSS rules that complement what Bootstrap already provides. Recommended if you use the HTML
+includes.
+
+### `/couth/pagination.html`
+
+An includable piece of HTML that you can use to paginate a set of results. See the example app
+for how it's used (the most important part is to set it up with `CouthSimpleCRUD`).
+
+### `/couth/edit-item.html` and `/couth/confirm-delete-item.html`
+
+Includable pieces of HTML that you can use to trigger the edition of an objection or its deletion
+(with built in confirmation). See the example app for usage, the important thing being to
+properly assign `$couthItem`.
+
 
 ## Internal API
 
@@ -322,18 +393,23 @@ The callback gets called with an error which is `null` on success and the design
 
 Adds all sorts of useful resources such as script dependencies, forms, etc.
 
-### ``
-### ``
-### ``
-### ``
-### ``
-### ``
-### ``
-### ``
-### ``
-### ``
-### ``
+### `app.prepareValidation()`
 
+Prepares everything that's needed to perform validation and permissions checking.
+
+## Misc internals
+
+### Forms support
+
+In `couth/forms` is a module with a `generate()` method that can take a Type and generate an
+Angular-friendly form that can create or edit it. This is mostly used internally, but if you're
+seeing form problems or limitations that's the place to look.
+
+### Design utils
+
+In `couth/couch/design-utils.js` is a library that gets added to the libs on the design document.
+The methods it provides are helpful to write basic views, show and list functions, and update
+functions.
 
 ## Testing Couth Apps
 
