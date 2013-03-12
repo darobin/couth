@@ -1,7 +1,7 @@
 {
     "name":         "couth"
 ,   "description":  "Refined Relaxation"
-,   "version":      "0.0.3"
+,   "version":      "0.5.0"
 ,   "author":       "Robin Berjon <robin@berjon.com>"
 ,   "dependencies": {
         "nopt":             "2.1.1"
