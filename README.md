@@ -91,6 +91,26 @@ file, but you should look inside the `example/` directory for the complete story
         })
     ;
 
+## Continuous Execution
+
+During development it can be convenient for your couth application to be re-run
+whenever there's a change so that you don't have to constantly return to the
+command line while you're tweaking some small detail, and can instead just
+hit reload.
+
+Nothing simpler, first, if that's not already the case, just install `nodemon`:
+
+    npm install -g nodemon
+
+And then run it:
+
+    nodemon --watch static -e js,css,html app.js 
+
+The above will only watch inside the static directory but will take into account
+file extensions js, css, and html (the default being just js). You can drop the
+`--watch` to watch everything or you can specify several, and you can add more
+file extensions.
+
 ## API
 
 ### `couth()`
@@ -149,7 +169,55 @@ and return a value if they no parameter. Otherwise they return `this` so as to b
 * `app.session(integer)`. The number of seconds that a user session lasts. CouchDB has this ridiculously
   low (10 minutes), Couth ups that to 90 days.
 
+### `app.addStaticDir(dir, [opts])`
 
+Recursively adds the content of a directory as static resources in the app. It will guess
+the proper media type for each file.
+
+The `opts` object can contain one option: `keepDotFiles` which defaults to `false`. If set to
+`true` this will also attach files that begin with a dot instead of skipping them.
+
+### `app.addStatics(statics)`
+
+Takes an array of static resources to add to the app (this is what does the underlying work
+for `addStaticDir()`). Each item in the array is a specifier that has the following fields:
+
+* `path`: the path it will have in the app.
+* `content`: a string pointing to a file, or a Buffer, with the resource's content.
+* `type`: (optional) the media type for this item.
+
+If a specifier is passed directly instead of an array, this will DWIM.
+
+### `app.cli()`
+
+If you want your app to process command line arguments in a convenient default way, simply
+call this. The recognised options are:
+
+* `--target TARGER`, `-t TARGET`. Set the target environment.
+* `--debug`, `-d`. Turn debugging mode on (prepares everything but does a fake deploy).
+* `--silent`, `-s`. Turn silent mode on (there will be no output).
+* `-dev`. Shortcut for `--target dev`.
+* `-prod`. Shortcut for `--target prod`.
+
+### `app.deploy(cb)`
+
+Actually runs the deployment. You should call that once your app object is fully configured.
+The callback will received an error if there was a problem, null otherwise.
+
+### `app.addRewrite(from, to, method, query)`
+
+Adds a new rewrite. Both `from` and `to` are required paths that are getting rewritten.
+If specified, `method` limits the rewrite to a specific method. If present, `query` is
+an object that provides key/value parameters to be added to the rewritten query (typically
+CouchDB view parameters such as `include_docs` or `skip`). Note that you do not need this
+CouchDB madness of escaping booleans and numbers, Couth does it for you.
+
+### `app.addLib(libName, content)`
+
+Adds a library of code that views, lists, shows, etc. can load using CommonJS and run.
+`libName` is the name of the library (it will be available under `lib/` so if you give it a name
+of "foo" code can then load it with `require("lib/foo")`). `content` is a string pointing to a
+file to load, or a Buffer.
 
 ### ``
 ### ``
@@ -167,45 +235,13 @@ and return a value if they no parameter. Otherwise they return `this` so as to b
 ### ``
 ### ``
 ### ``
-### ``
-### ``
-### ``
-### ``
-### ``
-### ``
-
-
-,   resolve:    function (target) {
-        var target = target || this.conf.target
-        ,   targets = "all dev prod test".split(" ")
-        ;
-        var ret = _.extend(this.conf, this.conf.all, this.conf[target]);
-        ret.target = target;
-        for (var i = 0, n = targets.length; i < n; i++) delete ret[targets[i]];
-        if (ret.deployTo === ret.vhost)
-            throw new Error("You should not use the same host for deployTo and vhost.");
-        if (ret.deployTo) ret.deployTo = ret.deployTo.replace(/\/$/, "");
-        return ret;
-    }
-,   error:  function (msg) {
-        this.log("[ERROR] " + msg);
-        throw new Error(msg);
-    }
-,   readRelFile:    function (path) {
-        return fs.readFileSync(pth.join(__dirname, path), "utf8");
-    }
-    // all content can be either a string path to a file, or a buffer
-,   loadContent:    function (source) {
-        if (_.isString(source)) return fs.readFileSync(source);
-        else return source;
-    }
 
 ## Internal API
 
 These methods are also exposed, but they probably aren't useful unless you're hacking
 on Couth itself.
 
-### `log`
+### `app.log(string)`
 
 Logs a message to stdout, respecting the silent flag if present.
 
@@ -213,20 +249,79 @@ Logs a message to stdout, respecting the silent flag if present.
 
 Get or set the target used for this run. The known targets are `dev`, `prod`, and `test`.
 
-### ``
-### ``
-### ``
-### ``
-### ``
-### ``
-### ``
-### ``
-### ``
-### ``
-### ``
-### ``
-### ``
-### ``
+### `app.resolve([target])`
+
+Returns the configuration that applies for a given target (the configured one if not
+provided) after it has been properly merged and defaulted.
+
+### `app.error(string)`
+
+Logs a message to the console and throws an error.
+
+### `app.readRelFile(path)`
+
+Reads a file as UTF-8, relative to the Couth library.
+
+### `app.loadContent(source)`
+
+Almost anything in Couth that loads content can accept either a string or a Buffer. If
+given a string, this will return a Buffer; if given a Buffer it just returns it.
+
+### `app.couthUserRoutes()`
+
+Sets up the rewrites needed to expose the Couth user API (basically nice URLs on top of
+CouchDB's user system).
+
+### `app.addAttachment(path, content, mediaType)`
+
+Does the grunt work of uploading an attachment. You probably want to call the higher level
+methods that deal with static content as this really will only do the upload. It takes the path
+at which you want the attachment stored on the design document, the content (path to file or Buffer),
+and an optional media type.
+
+### `app.addRequest(request)`
+
+Internally, when we process the various commands, everything that needs to make a request
+calls this, and it is only when deploy is called that the requests are actually executed
+(guaranteed one by one, in order).
+
+The `request` that is passed is an object with two fields:
+
+* `run`: this is a function that will receive a Cradle instance, and a callback to call once
+  it's done processing.
+* `reason`: a string indicating what's going on with this request.
+
+### `app.vhostInfo()`
+
+Produces information about the vhosts that will be needed.
+
+### `app.enforceConfig()`
+
+Builds requests that will configure CouchDB with the right session timeout and disable
+secure rewrites (don't panic about this).
+
+### `app.prepareVHost()`
+
+Builds the requests that will configure the vhosts in CouchDB.
+
+### `app.fakeDeploy(cb)`
+
+Runs a fake deployment (will output all requests but not touch the server). Calls the
+callback with an error if any.
+
+### `app.realDeploy(cb)`
+
+Runs the real deployment. Calls the callback with an error if any.
+
+### `app.loadCurrentDesign(cb)`
+
+Gets the current design document (it is guaranteed to return one even when there is none).
+The callback gets called with an error which is `null` on success and the design document.
+
+### `app.couthResources()`
+
+Adds all sorts of useful resources such as script dependencies, forms, etc.
+
 ### ``
 ### ``
 ### ``
@@ -240,22 +335,6 @@ Get or set the target used for this run. The known targets are `dev`, `prod`, an
 ### ``
 
 
-## Continuous Execution
+## Testing Couth Apps
 
-During development it can be convenient for your couth application to be re-run
-whenever there's a change so that you don't have to constantly return to the
-command line while you're tweaking some small detail, and can instead just
-hit reload.
-
-Nothing simpler, first, if that's not already the case, just install `nodemon`:
-
-    npm install -g nodemon
-
-And then run it:
-
-    nodemon --watch static -e js,css,html app.js 
-
-The above will only watch inside the static directory but will take into account
-file extensions js, css, and html (the default being just js). You can drop the
-`--watch` to watch everything or you can specify several, and you can add more
-file extensions.
+XXX document couth/tester
