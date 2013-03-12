@@ -1,0 +1,26 @@
+<div>
+  <h2>Books</h2>
+  <div ng-include="'/couth/forms/books.html'"></div>
+  <table class='table table-striped table-hover'>
+    <tr>
+      <th>Title</th>
+      <th>Authors</th>
+      <th>ISBN</th>
+      <th ng-show='$couthUser.name' class='couth-actions'>Actions</th>
+    </tr>
+    <tr ng-repeat='book in books | startFrom:$couthCurrentPage*$couthPageSize | limitTo:$couthPageSize'>
+      <td><strong>{{ book.title }}</strong></td>
+      <td>
+        <span ng-repeat='author in book.authors'>{{author.name}}<span ng-show='!$last'>, </span></span
+        ><span ng-show='book.etAl'> et al.</span>
+      </td>
+      <td><strong>{{ book.isbn }}</strong></td>
+      <td ng-show='$couthUser.name' class='couth-actions'>
+        <div ng-include="'/couth/edit-item.html'" ng-init='$couthItem = book' class='couth-inlined'></div>
+        <div ng-include="'/couth/confirm-delete-item.html'" ng-init='$couthItem = book'
+             ng-show='$couthUser.isAdmin' class='couth-inlined'></div>
+      </td>
+    </tr>
+  </table>
+  <div ng-include="'/couth/pagination.html'" class='couth-pagination'></div>
+</div>
