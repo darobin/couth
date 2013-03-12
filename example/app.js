@@ -1,4 +1,4 @@
-var couth = require("..")
+var couth = require("couth")
 ,   app = couth()
 ;
 
