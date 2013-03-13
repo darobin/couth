@@ -118,6 +118,37 @@ file extensions.
 
 Creates an instance application. All usage of `app` below refers to the result from that
 
+### `app.loadConfig(path)`
+
+Makes it possible to load a JSON configuration file rather than use code. This is a good
+place to put things like auth information (if you don't share the configuration) or
+local development settings. You may call this as many times as needed if you want to have
+multiple files (e.g. a common one, and a local override).
+
+The syntax is simple: the keys at the first level are one of the target environments,
+and the keys and values inside of them match the names of the configuration methods
+that follow. Here's an example:
+
+    {
+        "dev":  {
+            "auth": {
+                "username": "your-name"
+            ,   "password": "big secret"
+            }
+        ,   "vhost":    "local-project.dev"
+        ,   "deployTo": "http://local.project.dev/"
+        }
+    ,   "prod": {
+            "auth": {
+                "username": "same-name"
+            ,   "password": "other big secret"
+            }
+        }
+    ,   "all":  {
+            "port":     80
+        }
+    }
+
 ### `app.debug([boolean])`, `app.silent([boolean])`
 
 Get or set the debug and silent (no logging) statuses. It is probably more convenient to 
