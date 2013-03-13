@@ -1,5 +1,6 @@
 {{#if isHidden    }}{{> hidden}}{{/if
 }}{{#if isString  }}{{> string}}{{/if
+}}{{#if isText    }}{{> text}}{{/if
 }}{{#if isNumber  }}{{> number}}{{/if
 }}{{#if isBoolean }}{{> boolean}}{{/if
 }}{{#if isObject  }}{{> object}}{{/if
